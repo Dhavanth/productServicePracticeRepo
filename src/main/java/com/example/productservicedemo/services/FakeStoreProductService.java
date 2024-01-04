@@ -91,8 +91,8 @@ public class FakeStoreProductService implements ProductService{
         return null;
     }
 
-//    @Override
-//    public Product updateProduct(Long id, Product product){
+    @Override
+    public Product updateProduct(Long id, Product product){
 //        FakeStoreProductsDto productsDto = restTemplate.patchForObject(
 //                "https://fakestoreapi.com/products/" + id,
 //                product,
@@ -104,9 +104,9 @@ public class FakeStoreProductService implements ProductService{
 //        productsDto.setDescription("lorem ipsum set");
 //        productsDto.setImage("https://i.pravatar.cc");
 //        productsDto.setCategory("electronic");*/
-//
-//        return convertFakeStoreDtoToProduct(productsDto);
-//    }
+
+        return null;
+    }
 
 
     public Product replaceProduct(Long id, Product product){
