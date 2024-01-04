@@ -102,7 +102,6 @@ public class FakeStoreProductService implements ProductService{
 //        /*productsDto.setTitle("Test product");
 //        productsDto.setPrice(13.5);
 //        productsDto.setDescription("lorem ipsum set");
-//        productsDto.setImage("https://i.pravatar.cc");
 //        productsDto.setCategory("electronic");*/
 
         return null;
