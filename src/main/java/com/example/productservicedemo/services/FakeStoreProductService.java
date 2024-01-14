@@ -167,4 +167,9 @@ public class FakeStoreProductService implements ProductService{
         }
         return null;
     }
+
+    @Override
+    public List<Category> getAllCategories() {
+        return null;
+    }
 }

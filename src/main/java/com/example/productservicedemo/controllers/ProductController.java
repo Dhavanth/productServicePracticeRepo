@@ -21,13 +21,14 @@ import java.util.Optional;
 public class ProductController {
 
     private ProductService productService;
-    private final CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
     public ProductController(@Qualifier("selfProductService") ProductService productService,
                              CategoryRepository categoryRepository){
         this.productService = productService;
         this.categoryRepository = categoryRepository;
+
     }
 
     @GetMapping()
@@ -62,7 +63,8 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product){
-        return null;
+
+        return productService.updateProduct(id, product);
     }
 
     @PutMapping("/{id}")
@@ -78,5 +80,10 @@ public class ProductController {
     @GetMapping("/categories/{category}")
     public List<Product> getProductsInCategory(@PathVariable("category") String category){
         return productService.getProductsInCategory(category);
+    }
+
+    @GetMapping("/categories")
+    public List<Category> getAllCategories(){
+        return productService.getAllCategories();
     }
 }

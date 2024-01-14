@@ -1,5 +1,6 @@
 package com.example.productservicedemo.services;
 
+import com.example.productservicedemo.models.Category;
 import com.example.productservicedemo.models.Product;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,6 @@ public interface ProductService {
     public boolean deleteProduct(Long id);
 
     public List<Product> getProductsInCategory(String category);
+
+    public List<Category> getAllCategories();
 }
