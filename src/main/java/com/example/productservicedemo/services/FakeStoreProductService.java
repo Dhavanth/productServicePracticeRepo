@@ -132,7 +132,7 @@ public class FakeStoreProductService implements ProductService{
 
 
     @Override
-    public Product deleteProduct(Long id) {
+    public boolean deleteProduct(Long id) {
         FakeStoreProductsDto responseDto = restTemplate.exchange(
                 "https://fakestoreapi.com/products/" + id,
                 HttpMethod.DELETE,
@@ -141,11 +141,12 @@ public class FakeStoreProductService implements ProductService{
 
         if(responseDto != null) {
             System.out.println("Product deleted successfully");
-            return convertFakeStoreDtoToProduct(responseDto);
+            //return convertFakeStoreDtoToProduct(responseDto);
+            return true;
         }
 
         System.out.println("Product deletion failed");
-        return null;
+        return false;
     }
 
     @Override

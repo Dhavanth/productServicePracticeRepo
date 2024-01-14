@@ -15,7 +15,7 @@ public interface ProductService {
     public Product replaceProduct(Long id, Product product);
 
     public Product createProduct(Product product);
-    public Product deleteProduct(Long id);
+    public boolean deleteProduct(Long id);
 
     public List<Product> getProductsInCategory(String category);
 }

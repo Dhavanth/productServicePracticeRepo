@@ -1,23 +1,33 @@
 package com.example.productservicedemo.controllers;
 
+import com.example.productservicedemo.exceptions.ProductNotFoundException;
+import com.example.productservicedemo.models.Category;
 import com.example.productservicedemo.models.Product;
+import com.example.productservicedemo.repositories.CategoryRepository;
 import com.example.productservicedemo.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
     private ProductService productService;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductController(ProductService productService){
+    public ProductController(@Qualifier("selfProductService") ProductService productService,
+                             CategoryRepository categoryRepository){
         this.productService = productService;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping()
@@ -26,12 +36,27 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getSingleProduct(@PathVariable("id") Long id){
-        return productService.getSingleproduct(id);
+    public ResponseEntity<Product> getSingleProduct(@PathVariable("id") Long id){
+
+        try{
+            return new ResponseEntity<>(productService.getSingleproduct(id), HttpStatus.OK);
+        }catch(ProductNotFoundException exception){
+            ResponseEntity<Product> response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return response;
+        }
     }
 
     @PostMapping()
     public Product addNewProduct(@RequestBody Product product){
+
+        Optional<Category> optionalCategory = categoryRepository.findByName(product.getCategory().getName());
+        if(optionalCategory.isEmpty()){
+            Category savedCategory = categoryRepository.save(product.getCategory());
+            product.setCategory(savedCategory);
+        }else{
+            product.setCategory(optionalCategory.get());
+        }
+
         return productService.createProduct(product);
     }
 
