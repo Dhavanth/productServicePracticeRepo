@@ -1,9 +1,10 @@
 package com.example.productservicedemo.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,4 +12,11 @@ import lombok.Setter;
 public class Category extends BaseModel {
 
     private String name;
+    @OneToMany(
+            mappedBy = "category",
+            cascade = CascadeType.REMOVE
+            //fetch = FetchType.EAGER
+            // Default fetch type for collection is LAZY
+    )
+    private List<Product> products;
 }
