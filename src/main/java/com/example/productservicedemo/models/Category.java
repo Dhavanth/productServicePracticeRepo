@@ -19,4 +19,7 @@ public class Category extends BaseModel {
             // Default fetch type for collection is LAZY
     )
     private List<Product> products;
+    private String imageUrl;
+    private String description;
+
 }
