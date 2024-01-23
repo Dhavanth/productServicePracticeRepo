@@ -6,12 +6,13 @@ import com.example.productservicedemo.models.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionHandlers {
 
-    public ResponseEntity<ExceptionDto> handleProductNotFoundException(
-            ProductNotFoundException productNotFoundException){
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ExceptionDto> handleProductNotFoundException(ProductNotFoundException productNotFoundException){
         ExceptionDto exceptionDto = new ExceptionDto();
         exceptionDto.setMessage(productNotFoundException.getMessage());
 
