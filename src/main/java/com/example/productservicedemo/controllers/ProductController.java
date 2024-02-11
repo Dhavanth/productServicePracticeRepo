@@ -1,5 +1,8 @@
 package com.example.productservicedemo.controllers;
 
+import com.example.productservicedemo.commons.AuthenticationCommons;
+import com.example.productservicedemo.dtos.Role;
+import com.example.productservicedemo.dtos.UserDto;
 import com.example.productservicedemo.exceptions.ProductNotFoundException;
 import com.example.productservicedemo.models.Category;
 import com.example.productservicedemo.models.Product;
@@ -23,17 +26,40 @@ public class ProductController {
     private ProductService productService;
     private CategoryRepository categoryRepository;
 
+    private AuthenticationCommons authenticationCommons;
+
     @Autowired
     public ProductController(@Qualifier("selfProductService") ProductService productService,
-                             CategoryRepository categoryRepository){
+                             CategoryRepository categoryRepository,
+                             AuthenticationCommons authenticationCommons){
         this.productService = productService;
         this.categoryRepository = categoryRepository;
-
+        this.authenticationCommons = authenticationCommons;
     }
 
     @GetMapping()
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts(@RequestHeader("AuthenticationToken") String token){
+
+        // 1. Once I receive the token, I have to validate the token
+        UserDto userDto = authenticationCommons.validateToken(token);
+
+        if(userDto == null){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        boolean isAdmin = false;
+        for(Role role: userDto.getRoles()){
+            if(role.getRoleName().equals("ADMIN")){
+                isAdmin = true;
+                break;
+            }
+        }
+
+        if(!isAdmin){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
