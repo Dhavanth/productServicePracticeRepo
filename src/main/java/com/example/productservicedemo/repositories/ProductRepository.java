@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findById(Long id);
-
+    // SELECT * FROM product where id = ?
     Product save(Product product);
 
     List<Product> findByCategory_Name(String name);
