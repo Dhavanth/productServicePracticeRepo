@@ -7,11 +7,13 @@ import com.example.productservicedemo.models.Product;
 import com.example.productservicedemo.repositories.CategoryRepository;
 import com.example.productservicedemo.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+//@Primary
 @Service("selfProductService")
 // Why did we name this service?
 // In Product Controller, we have a ProductService attribute

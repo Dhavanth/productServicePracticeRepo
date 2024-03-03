@@ -4,6 +4,8 @@ import com.example.productservicedemo.dtos.FakeStoreProductsDto;
 import com.example.productservicedemo.models.Category;
 import com.example.productservicedemo.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -13,24 +15,39 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Primary
+@Service("fakeProductService")
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
+    private RedisTemplate redisTemplate;
 
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate){
+    public FakeStoreProductService(RestTemplate restTemplate,
+                                   RedisTemplate redisTemplate){
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
     public Product getSingleproduct(Long id){
+
+        Product p = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + id);
+
+        if(p != null){
+            return p;
+        }
+
+
         FakeStoreProductsDto productsDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + id,
                 FakeStoreProductsDto.class
         );
 
+        Product p1 = convertFakeStoreDtoToProduct(productsDto);
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_"+ id, p1);
+
         //convert fakestoredto to product to return product
-        return convertFakeStoreDtoToProduct(productsDto);
+        return p1;
     }
 
     public Product convertFakeStoreDtoToProduct(FakeStoreProductsDto productsDto){
