@@ -5,6 +5,8 @@ import com.example.productservicedemo.models.Category;
 import com.example.productservicedemo.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Primary
+//@Primary
 @Service("fakeProductService")
 public class FakeStoreProductService implements ProductService{
     private RestTemplate restTemplate;
@@ -90,7 +92,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public Page<Product> getAllProducts(int pageNumber, int pageSize) {
         FakeStoreProductsDto[] productsDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products",
                 FakeStoreProductsDto[].class);
@@ -101,7 +103,8 @@ public class FakeStoreProductService implements ProductService{
             for(FakeStoreProductsDto productDto : productsDto){
                 products.add(convertFakeStoreDtoToProduct(productDto));
             }
-            return products;
+            return new PageImpl<>(products);
+            //return products;
         }else{
             System.out.println("No products found");
         }

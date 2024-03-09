@@ -10,6 +10,7 @@ import com.example.productservicedemo.repositories.CategoryRepository;
 import com.example.productservicedemo.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class ProductController {
     private AuthenticationCommons authenticationCommons;
 
     @Autowired
-    public ProductController(@Qualifier("fakeProductService") ProductService productService,
+    public ProductController(@Qualifier("selfProductService") ProductService productService,
                              CategoryRepository categoryRepository,
                              AuthenticationCommons authenticationCommons){
         this.productService = productService;
@@ -38,8 +39,9 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Product>> getAllProducts(
+    public ResponseEntity<Page<Product>> getAllProducts(
             //@RequestHeader("AuthenticationToken") String token
+            @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize
     ){
 
 //        // 1. Once I receive the token, I have to validate the token
@@ -60,8 +62,9 @@ public class ProductController {
 //        if(!isAdmin){
 //            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 //        }
+        ResponseEntity<Page<Product>> response = new ResponseEntity<>(productService.getAllProducts(pageNumber, pageSize), HttpStatus.OK);
 
-        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
+        return response;
     }
 
     @GetMapping("/{id}")
