@@ -92,7 +92,10 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Page<Product> getAllProducts(int pageNumber, int pageSize) {
+    public Page<Product> getAllProducts(int pageNumber,
+                                        int pageSize,
+                                        String sortBy,
+                                        String sortOrder) {
         FakeStoreProductsDto[] productsDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products",
                 FakeStoreProductsDto[].class);

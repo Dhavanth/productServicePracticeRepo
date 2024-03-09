@@ -41,7 +41,10 @@ public class ProductController {
     @GetMapping()
     public ResponseEntity<Page<Product>> getAllProducts(
             //@RequestHeader("AuthenticationToken") String token
-            @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize
+            @RequestParam("pageNumber") int pageNumber,
+            @RequestParam("pageSize") int pageSize,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("sortOrder") String sortOrder
     ){
 
 //        // 1. Once I receive the token, I have to validate the token
@@ -62,7 +65,7 @@ public class ProductController {
 //        if(!isAdmin){
 //            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 //        }
-        ResponseEntity<Page<Product>> response = new ResponseEntity<>(productService.getAllProducts(pageNumber, pageSize), HttpStatus.OK);
+        ResponseEntity<Page<Product>> response = new ResponseEntity<>(productService.getAllProducts(pageNumber, pageSize, sortBy, ""), HttpStatus.OK);
 
         return response;
     }

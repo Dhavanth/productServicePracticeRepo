@@ -11,7 +11,10 @@ import java.util.List;
 public interface ProductService {
 
     public Product getSingleproduct(Long id);
-    public Page<Product> getAllProducts(int pageNumber, int pageSize);
+    public Page<Product> getAllProducts(int pageNumber,
+                                        int pageSize,
+                                        String sortBy,
+                                        String sortOrder);
     public Product updateProduct(Long id, Product product);
 
     public Product replaceProduct(Long id, Product product);
