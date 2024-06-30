@@ -84,4 +84,22 @@ public class ProductRepositoryTests {
         Assertions.assertThat(products).isNotNull();
         Assertions.assertThat(products.size()).isEqualTo(2);
     }
+
+    @Test
+    public void testDeleteProduct() {
+        //ARRANGE OR GIVEN
+        Product product1 = new Product();
+        product1.setTitle("Laptop");
+        product1.setPrice(1000.0);
+        product1.setDescription("Dell Laptop");
+
+        Product savedproduct = productRepository.save(product1);
+
+        //ACT OR WHEN
+        productRepository.deleteById(savedproduct.getId());
+
+        //ASSERT OR THEN
+        Product product = productRepository.findById(savedproduct.getId()).orElse(null);
+        Assertions.assertThat(product).isNull();
+    }
 }
