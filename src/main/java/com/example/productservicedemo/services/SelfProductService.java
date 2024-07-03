@@ -106,7 +106,8 @@ public class SelfProductService implements ProductService{
             existingProduct.setCategory(optionalCategory.get());
         }
 
-        return productRepository.save(existingProduct);
+        Product savedProduct = productRepository.save(existingProduct);
+        return savedProduct;
     }
 
     @Override
